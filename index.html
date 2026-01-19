@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Tebak-Tebakan Level 1–20</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tebak-Tebakan Seru Level 1–20</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,275 +14,192 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      overflow: hidden;
     }
-    .card {
+    .game {
       background: rgba(0,0,0,0.3);
-      padding: 20px;
-      border-radius: 16px;
+      padding: 20px 25px;
+      border-radius: 15px;
       width: 100%;
-      max-width: 500px;
-      height: 100%;
-      max-height: 100vh;
-      text-align: center;
+      max-width: 420px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      text-align: center;
     }
-    h1 { margin-bottom: 10px; }
+    h1 { margin-top: 0; }
     .info {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      gap: 4px;
-    }
-    .question { font-size: 20px; margin: 25px 0; }
-    input {
-      padding: 12px;
-      width: 90%;
-      border-radius: 10px;
-      border: none;
       margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .timer {
+      font-size: 20px;
+      margin: 10px 0;
+      color: #ffeb3b;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 10px;
       font-size: 16px;
     }
     button {
-      padding: 12px 18px;
+      margin-top: 12px;
+      padding: 10px 15px;
       border: none;
-      border-radius: 10px;
-      background: #38bdf8;
-      color: #000;
-      font-weight: bold;
+      border-radius: 8px;
+      background: #4caf50;
+      color: #fff;
       font-size: 16px;
       cursor: pointer;
     }
-    button:hover { background: #0ea5e9; }
-    .message { margin-top: 15px; font-weight: bold; }
-    .timer { font-weight: bold; color: #fde047; }
-    .danger { color: #f87171; animation: blink 1s infinite; }
-    .music-btn { background: #22c55e; font-size: 12px; padding: 8px; }
-    .music-btn.off { background: #ef4444; }
-    
-    @keyframes blink { 50% { opacity: 0.4; } }
+    button:hover { background: #43a047; }
+    .message { margin-top: 10px; min-height: 24px; }
   </style>
 </head>
 <body>
-  
-
-  <div class="card" id="game">
-    <h1>Tebak-Tebakan</h1>
+  <div class="game">
+    <h1>🎯 Tebak-Tebakan Seru</h1>
     <div class="info">
-      <div id="level">Lv 1</div>
-      <div id="score">⭐ 0</div>
-      <div id="lives">❤️❤️❤️</div>
-      <div class="timer" id="timer">⏱️ 20</div>
-      <button class="music-btn" id="musicBtn">🎵</button>
+      <div id="level"></div>
+      <div id="score">Score: 0</div>
+      <div id="lives">❤️ 3</div>
     </div>
-    <div class="question" id="question"></div>
+    <div id="question"></div>
+    <div class="timer" id="timer"></div>
     <input type="text" id="answer" placeholder="Jawaban kamu..." />
-    <button id="answerBtn">Jawab</button>
+    <button onclick="checkAnswer()">Jawab</button>
     <div class="message" id="message"></div>
-    <button id="restartBtn" style="margin-top:15px; display:none;">🔁 Restart Game</button>
+    <button onclick="openWhatsApp()" style="background:#25D366">🔑 Kunci Jawaban (WhatsApp)</button>
   </div>
 
-  <!-- Audio -->
-  <audio id="bgm" src="https://actions.google.com/sounds/v1/ambiences/ambience_cafe.ogg" loop></audio>
-  <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-  <audio id="gameover" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
-
   <script>
-    // =====================
-    // DATA
-    // =====================
-    const questions = [
-      { q: "Apa yang selalu naik tapi tidak pernah turun?", a: "umur" },
-      { q: "Benda apa yang punya leher tapi tidak punya kepala?", a: "botol" },
-      { q: "Semakin diambil semakin besar, apakah itu?", a: "lubang" },
-      { q: "Apa yang bisa berjalan tapi tidak punya kaki?", a: "waktu" },
-      { q: "Apa yang jika dibagi tidak berkurang?", a: "cinta" },
-      { q: "Huruf apa yang paling dingin?", a: "b" },
-      { q: "Apa yang selalu mengikutimu ke mana pun, tapi tidak bisa kamu sentuh?", a: "bayangan" },
-      { q: "Apa yang punya mata tapi tidak bisa melihat?", a: "jarum" },
-      { q: "Apa yang bisa terbang tanpa sayap?", a: "waktu" },
-      { q: "Apa yang penuh lubang tapi bisa menampung air?", a: "spons" },
-      { q: "Apa yang jika disebut namanya justru menghilang?", a: "diam" },
-      { q: "Apa yang bisa berbicara tanpa mulut?", a: "gema" },
-      { q: "Apa yang datang sekali dalam setahun, dua kali dalam seminggu, dan tidak pernah dalam sehari?", a: "huruf n" },
-      { q: "Apa yang selalu ada di depanmu tapi tidak bisa kamu lihat?", a: "masa depan" },
-      { q: "Apa yang beratnya bertambah jika dibalik?", a: "angka 6" },
-      { q: "Apa yang bisa pecah tanpa dipukul?", a: "janji" },
-      { q: "Apa yang punya kunci tapi tidak bisa membuka pintu?", a: "piano" },
-      { q: "Apa yang semakin kamu kejar, semakin menjauh?", a: "kebahagiaan" },
-      { q: "Apa yang tidak hidup tapi bisa tumbuh?", a: "kristal" },
-      { q: "Apa yang selalu benar meski tidak pernah jujur?", a: "jam" }
+    const levels = [
+      { q: 'Apa yang selalu basah walau tidak pernah masuk air?', a: 'lidah' },
+      { q: 'Apa yang punya kunci tapi tidak bisa membuka pintu?', a: 'piano' },
+      { q: 'Semakin diambil semakin besar, apakah itu?', a: 'lubang' },
+      { q: 'Apa yang bisa terbang tanpa sayap?', a: 'waktu' },
+      { q: 'Apa yang selalu mengikuti kamu ke mana pun tapi tidak terlihat?', a: 'bayangan' },
+      { q: 'Apa yang punya tangan tapi tidak bisa memegang?', a: 'jam' },
+      { q: 'Apa yang bisa berbicara tanpa mulut?', a: 'gema' },
+      { q: 'Apa yang bisa berjalan tanpa kaki?', a: 'jam' },
+      { q: 'Apa yang naik tapi tidak pernah turun?', a: 'umur' },
+      { q: 'Apa yang jika dipatahkan justru menjadi lebih baik?', a: 'rekor' },
+      { q: 'Apa yang selalu datang tapi tidak pernah sampai?', a: 'besok' },
+      { q: 'Apa yang bisa kamu tangkap tapi tidak bisa dilempar?', a: 'flu' },
+      { q: 'Apa yang punya kepala dan ekor tapi tidak punya badan?', a: 'koin' },
+      { q: 'Apa yang lebih ringan dari kapas tapi tidak bisa diangkat lama?', a: 'napas' },
+      { q: 'Apa yang jika disebut namanya justru menghilang?', a: 'diam' },
+      { q: 'Apa yang selalu ada di depanmu tapi tidak bisa kamu lihat?', a: 'masa depan' },
+      { q: 'Apa yang bisa pecah tanpa dipukul?', a: 'janji' },
+      { q: 'Apa yang punya mata tapi tidak bisa melihat?', a: 'jarum' },
+      { q: 'Apa yang bisa mengisi ruangan tanpa memakan tempat?', a: 'cahaya' },
+      { q: 'Apa yang semakin kamu bagi semakin banyak?', a: 'ilmu' }
     ];
 
-    // =====================
-    // STATE
-    // =====================
-    let level = 0, score = 0, lives = 3;
-    let timeLeft = 20, timerInterval = null;
-    let musicOn = true;
+    let currentLevel = 0;
+    let timeLeft = 30;
+    let score = 0;
+    let lives = 3;
+    let timerInterval;
 
-    // =====================
-    // ELEMENTS
-    // =====================
-    const bgm = document.getElementById('bgm');
-    const beep = document.getElementById('beep');
-    const gameoverSound = document.getElementById('gameover');
-    
-    const musicBtn = document.getElementById('musicBtn');
-    const answerBtn = document.getElementById('answerBtn');
-    const restartBtn = document.getElementById('restartBtn');
-
-    bgm.volume = 0.4;
-
-        
-        if (!document.fullscreenElement) {
-          const el = document.documentElement;
-          const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
-          if (req) req.call(el);
-        } else {
-          const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-          if (exit) exit.call(document);
-        }
-      } catch (e) {
-        // Graceful fallback instead of throwing
-        console.warn('Fullscreen blocked:', e);
-      }
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep(freq = 800, duration = 0.1) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.value = freq;
+      osc.start();
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+      osc.stop(audioCtx.currentTime + duration);
     }
 
-    
-
-    // =====================
-    // MUSIC
-    // =====================
-    function toggleMusic() {
-      if (musicOn) {
-        bgm.pause();
-        musicBtn.textContent = '🔇';
-      } else {
-        bgm.play().catch(() => {}); // autoplay-safe
-        musicBtn.textContent = '🎵';
-      }
-      musicOn = !musicOn;
-    }
-
-    musicBtn.addEventListener('click', toggleMusic);
-
-    // =====================
-    // TIMER
-    // =====================
-    function startTimer() {
-      clearInterval(timerInterval);
-      timeLeft = 20;
-      const timerEl = document.getElementById('timer');
-      timerEl.classList.remove('danger');
-      timerEl.textContent = `⏱️ ${timeLeft}`;
-
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerEl.textContent = `⏱️ ${timeLeft}`;
-
-        if (timeLeft <= 5 && timeLeft > 0) {
-          timerEl.classList.add('danger');
-          try { beep.currentTime = 0; beep.play(); } catch {}
-        }
-
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          lives--;
-          updateInfo();
-          if (lives <= 0) gameOver(); else loadQuestion();
-        }
-      }, 1000);
-    }
-
-    // =====================
-    // GAME FLOW
-    // =====================
     function updateInfo() {
-      document.getElementById('level').textContent = `Lv ${level + 1}`;
-      document.getElementById('score').textContent = `⭐ ${score}`;
-      document.getElementById('lives').textContent = '❤️'.repeat(lives);
+      document.getElementById('score').innerText = 'Score: ' + score;
+      document.getElementById('lives').innerText = '❤️ ' + lives;
     }
 
-    function loadQuestion() {
-      document.getElementById('question').textContent = questions[level].q;
+    function loadLevel() {
+      if (lives <= 0) {
+        document.querySelector('.game').innerHTML = `<h1>💀 Game Over</h1><p>Score akhir: ${score}</p>`;
+        return;
+      }
+      if (currentLevel >= levels.length) {
+        document.querySelector('.game').innerHTML = `<h1>🎉 Tamat!</h1><p>Score akhir: ${score}</p>`;
+        return;
+      }
+      document.getElementById('level').innerText = 'Level ' + (currentLevel + 1);
+      document.getElementById('question').innerText = levels[currentLevel].q;
       document.getElementById('answer').value = '';
-      document.getElementById('message').textContent = '';
+      document.getElementById('message').innerText = '';
+      timeLeft = 30;
+      updateTimer();
       updateInfo();
-      startTimer();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(countdown, 1000);
     }
 
-    function gameOver() {
-      clearInterval(timerInterval);
-      bgm.pause();
-      document.getElementById('question').textContent = '💀 Game Over';
-      document.getElementById('message').textContent = `Skor akhir: ${score}`;
-      restartBtn.style.display = 'inline-block';
-      try { gameoverSound.play(); } catch {}
-    }`;
-      try { gameoverSound.play(); } catch {}
+    function updateTimer() {
+      document.getElementById('timer').innerText = '⏱️ ' + timeLeft + ' detik';
+    }
+
+    function countdown() {
+      timeLeft--;
+      beep(1000, 0.05);
+      updateTimer();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        lives--;
+        beep(200, 0.5);
+        document.getElementById('message').innerText = '⏰ Waktu habis! Nyawa berkurang.';
+        updateInfo();
+        setTimeout(loadLevel, 1500);
+      }
     }
 
     function checkAnswer() {
-      // ensure music only starts after user interaction
-      if (musicOn && bgm.paused) bgm.play().catch(() => {});
-
       const userAnswer = document.getElementById('answer').value.toLowerCase().trim();
-      if (userAnswer === questions[level].a) {
+      if (userAnswer === levels[currentLevel].a) {
         clearInterval(timerInterval);
-        score += 10;
-        level++;
-        if (level < questions.length) {
-          setTimeout(loadQuestion, 500);
-        } else {
-          bgm.pause();
-          document.getElementById('question').textContent = `🎉 Tamat! Skor: ${score}`;
-        }
+        score += 10 + timeLeft; // bonus score
+        timeLeft = Math.min(timeLeft + 5, 60); // bonus waktu max 60
+        document.getElementById('message').innerText = '✅ Benar! +5 detik bonus waktu';
+        currentLevel++;
+        updateInfo();
+        setTimeout(loadLevel, 1200);
       } else {
         lives--;
+        document.getElementById('message').innerText = '❌ Salah! Nyawa berkurang.';
         updateInfo();
-        if (lives <= 0) gameOver();
+        if (lives <= 0) setTimeout(loadLevel, 800);
       }
     }
 
-    answerBtn.addEventListener('click', checkAnswer);
+    function openWhatsApp() {
+      const question = levels[currentLevel].q;
+      const text = encodeURIComponent(
+        'Halo admin 👋
+Aku minta kunci jawaban ya 🙏
 
-    restartBtn.addEventListener('click', () => {
-      // RESET STATE
-      level = 0;
-      score = 0;
-      lives = 3;
-      musicOn = true;
+Level: ' + (currentLevel + 1) + '
+Pertanyaan: ' + question
+      );
+      const phone = '6281234567890'; // GANTI dengan nomor WhatsApp kamu
+      window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    } else {
+        lives--;
+        document.getElementById('message').innerText = '❌ Salah! Nyawa berkurang.';
+        updateInfo();
+        if (lives <= 0) {
+          setTimeout(loadLevel, 800);
+        }
+      }
+    }
 
-      // RESET UI
-      restartBtn.style.display = 'none';
-      musicBtn.textContent = '🎵';
-      document.getElementById('message').textContent = '';
-
-      // RESET AUDIO
-      bgm.currentTime = 0;
-      bgm.play().catch(() => {});
-
-      loadQuestion();
-    });
-
-    // =====================
-    // INIT
-    // =====================
-    loadQuestion();
-
-    // =====================
-    // BASIC RUNTIME CHECKS (manual tests)
-    // =====================
-    // 1. Fullscreen button should NOT throw even if blocked
-    // 2. Game should continue normally if fullscreen is unavailable
-    // 3. Timer reaches 0 -> life decreases
-    // 4. Lives reach 0 -> Game Over without JS error
+    loadLevel();
   </script>
 </body>
-  </html>
-  
+</html>
