@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTl>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -56,6 +57,26 @@
     }
     button:hover { background: #43a047; }
     .message { margin-top: 10px; min-height: 24px; }
+   
+    footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+footer a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+    
   </style>
 </head>
 <body>
@@ -72,9 +93,9 @@
     <button onclick="checkAnswer()">Jawab</button>
     <div class="message" id="message"></div>
   </div>
-  
+
    <audio id="bgm" src="backsound.mp3" loop></audio>
-  
+
   <script>
     const levels = [
       { q: 'Apa yang selalu basah walau tidak pernah masuk air?', a: 'lidah' },
@@ -185,19 +206,17 @@
       const bgm = document.getElementById('bgm');
       if (bgm.paused) bgm.play();
     }, { once: true });
-    
+
     loadLevel();
   </script>
+  
+<footer>
+  © 2026 • Dibuat oleh 
+  <a href="https://wa.me/62895352505993?text=Halo%20saya%20mau%20tanya%20tentang%20game%20tebak-tebakan" target="_blank">
+    Bang Raden
+  </a>
+</footer>
+  
+
 </body>
 </html>
-<footer>
-  <p>© 2026 Dibuat Oleh<br>Raden</p>
-
-  <p style="
-    margin-top:20px;
-    font-size:12px;
-    opacity:0.7;
-    letter-spacing:1px;">
-    WhatsApp <strong>+62-895352505993</strong>
-  </p>
-</footer>
