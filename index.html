@@ -97,32 +97,6 @@ footer a:hover {
    <audio id="bgm" src="backsound.mp3" loop></audio>
 
   <script>
-    
-    function restartGame() {
-  clearInterval(timerInterval);
-  currentLevel = 0;
-  score = 0;
-  lives = 3;
-  timeLeft = 30;
-
-  // kembalikan tampilan game
-  document.querySelector('.game').innerHTML = `
-    <h1>🎯 Tebak-Tebakan Seru</h1>
-    <div class="info">
-      <div id="level"></div>
-      <div id="score">Score: 0</div>
-      <div id="lives">❤️ 3</div>
-    </div>
-    <div id="question"></div>
-    <div class="timer" id="timer"></div>
-    <input type="text" id="answer" placeholder="Jawaban kamu..." />
-    <button onclick="checkAnswer()">Jawab</button>
-    <div class="message" id="message"></div>
-  `;
-
-  loadLevel();
-    }
-    
     const levels = [
       { q: 'Apa yang selalu basah walau tidak pernah masuk air?', a: 'lidah' },
       { q: 'Apa yang punya kunci tapi tidak bisa membuka pintu?', a: 'piano' },
@@ -169,6 +143,28 @@ footer a:hover {
       document.getElementById('score').innerText = 'Score: ' + score;
       document.getElementById('lives').innerText = '❤️ ' + lives;
     }
+
+    function restartGame() {
+  clearInterval(timerInterval);
+  currentLevel = 0;
+  score = 0;
+  lives = 3;
+  timeLeft = 30;
+
+  // kembalikan tampilan game
+  document.querySelector('.game').innerHTML = `
+    <h1>🎯 Tebak-Tebakan Seru</h1>
+    <div class="info">
+      <div id="level"></div>
+      <div id="score">Score: 0</div>
+      <div id="lives">❤️ 3</div>
+    </div>
+    <div id="question"></div>
+    <div class="timer" id="timer"></div>
+    <input type="text" id="answer" placeholder="Jawaban kamu..." />
+    <button onclick="checkAnswer()">Jawab</button>
+    <div class="message" id="message"></div>
+  `;
 
     function loadLevel() {
       if (lives <= 0) {
