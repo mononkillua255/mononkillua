@@ -180,7 +180,12 @@
         }
       }
     }
-
+// autoplay backsound (aktif setelah interaksi user)
+    document.body.addEventListener('click', () => {
+      const bgm = document.getElementById('bgm');
+      if (bgm.paused) bgm.play();
+    }, { once: true });
+    
     loadLevel();
   </script>
 </body>
