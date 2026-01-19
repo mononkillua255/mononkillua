@@ -148,14 +148,8 @@ footer a:hover {
 
     function loadLevel() {
       if (lives <= 0) {
-  clearInterval(timerInterval);
-  document.querySelector('.game').innerHTML = `
-    <h1>💀 Game Over</h1>
-    <p>Score akhir: ${score}</p>
-    <button onclick="restartGame()" style="background:#f44336">
-      🔄 Restart Game
-    </button>;
-  
+  document.querySelector('.game').innerHTML =
+    `<h1>💀 Game Over</h1><p>Score akhir: ${score}</p>`;
   return;
       }
       
