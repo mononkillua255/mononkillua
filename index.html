@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTl>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -57,31 +56,11 @@
     }
     button:hover { background: #43a047; }
     .message { margin-top: 10px; min-height: 24px; }
-   
-    footer {
-  position: fixed;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  opacity: 0.9;
-}
-
-footer a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-    
   </style>
 </head>
 <body>
   <div class="game">
-    <h1> Tebak-Tebakan Seru</h1>
+    <h1>🎯 Tebak-Tebakan Seru</h1>
     <div class="info">
       <div id="level"></div>
       <div id="score">Score: 0</div>
@@ -93,8 +72,6 @@ footer a:hover {
     <button onclick="checkAnswer()">Jawab</button>
     <div class="message" id="message"></div>
   </div>
-
-   <audio id="bgm" src="backsound.mp3" loop></audio>
 
   <script>
     const levels = [
@@ -144,17 +121,11 @@ footer a:hover {
       document.getElementById('lives').innerText = '❤️ ' + lives;
     }
 
-    
-
     function loadLevel() {
-
       if (lives <= 0) {
-  document.querySelector('.game').innerHTML = `<h1>💀 Game Over</h1><p>Score akhir: ${score}</p>`;
-  return;
+        document.querySelector('.game').innerHTML = `<h1>💀 Game Over</h1><p>Score akhir: ${score}</p>`;
+        return;
       }
-      
-      
-      
       if (currentLevel >= levels.length) {
         document.querySelector('.game').innerHTML = `<h1>🎉 Tamat!</h1><p>Score akhir: ${score}</p>`;
         return;
@@ -193,7 +164,7 @@ footer a:hover {
       if (userAnswer === levels[currentLevel].a) {
         clearInterval(timerInterval);
         score += 10 + timeLeft; // bonus waktu
-        timeLeft = Math.min(timeLeft + 2, 60); // tambah waktu, maksimal 60 detik
+        timeLeft = Math.min(timeLeft + 5, 60); // tambah waktu, maksimal 60 detik
         document.getElementById('message').innerText = '✅ Benar! +5 detik bonus waktu';
         currentLevel++;
         updateInfo();
@@ -207,26 +178,8 @@ footer a:hover {
         }
       }
     }
-// autoplay backsound (aktif setelah interaksi user)
-    document.body.addEventListener('click', () => {
-      const bgm = document.getElementById('bgm');
-      if (bgm.paused) bgm.play();
-    }, { once: true });
 
-
-  loadLevel();
-    }
-    
-    
+    loadLevel();
   </script>
-  
-<footer>
-  © 2026 • Dibuat oleh Bang Raden
-  <a href="https://wa.me/62895352505993?text=Halo%20saya%20mau%20tanya%20tentang%20game%20tebak-tebakan" target="_blank">
-    📞WhatsApp 
-  </a>
-</footer>
-  
-
 </body>
 </html>
