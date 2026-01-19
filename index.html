@@ -147,10 +147,12 @@ footer a:hover {
     
 
     function loadLevel() {
+
       if (lives <= 0) {
   document.querySelector('.game').innerHTML = `<h1>💀 Game Over</h1><p>Score akhir: ${score}</p>`;
   return;
       }
+      
       
       
       if (currentLevel >= levels.length) {
