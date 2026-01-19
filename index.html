@@ -180,6 +180,18 @@
     }
 
     loadLevel();
+    function openWhatsApp() {
+      const level = currentLevel + 1;
+      const question = levels[currentLevel].q;
+      const text = encodeURIComponent(
+        'Halo admin 👋
+Saya minta kunci jawaban ya 🙏
+
+Level: ' + level + '
+Pertanyaan: ' + question
+      );
+      const phone = '6281234567890'; // GANTI dengan nomor WhatsApp kamu
+      window.open('https://wa.me/' + phone + '?text=' + text, '_blank');
   </script>
 </body>
 </html>
