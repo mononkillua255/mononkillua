@@ -71,7 +71,6 @@
     <input type="text" id="answer" placeholder="Jawaban kamu..." />
     <button onclick="checkAnswer()">Jawab</button>
     <div class="message" id="message"></div>
-    <button onclick="openWhatsApp()" style="background:#25D366">🔑 Kunci Jawaban (WhatsApp)</button>
   </div>
 
   <script>
@@ -164,32 +163,13 @@
       const userAnswer = document.getElementById('answer').value.toLowerCase().trim();
       if (userAnswer === levels[currentLevel].a) {
         clearInterval(timerInterval);
-        score += 10 + timeLeft; // bonus score
-        timeLeft = Math.min(timeLeft + 5, 60); // bonus waktu max 60
+        score += 10 + timeLeft; // bonus waktu
+        timeLeft = Math.min(timeLeft + 5, 60); // tambah waktu, maksimal 60 detik
         document.getElementById('message').innerText = '✅ Benar! +5 detik bonus waktu';
         currentLevel++;
         updateInfo();
         setTimeout(loadLevel, 1200);
       } else {
-        lives--;
-        document.getElementById('message').innerText = '❌ Salah! Nyawa berkurang.';
-        updateInfo();
-        if (lives <= 0) setTimeout(loadLevel, 800);
-      }
-    }
-
-    function openWhatsApp() {
-      const question = levels[currentLevel].q;
-      const text = encodeURIComponent(
-        'Halo admin 👋
-Aku minta kunci jawaban ya 🙏
-
-Level: ' + (currentLevel + 1) + '
-Pertanyaan: ' + question
-      );
-      const phone = '6281234567890'; // GANTI dengan nomor WhatsApp kamu
-      window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
-    } else {
         lives--;
         document.getElementById('message').innerText = '❌ Salah! Nyawa berkurang.';
         updateInfo();
