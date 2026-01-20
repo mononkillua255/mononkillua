@@ -73,8 +73,7 @@
     <div class="message" id="message"></div>
   </div>
 
-  <audio id="bgm" src="backsound.mp3" loop></audio>
-
+<audio id="bgm" src="backsound.mp3" loop></audio>
   <script>
     const levels = [
       { q: 'Apa yang selalu basah walau tidak pernah masuk air?', a: 'lidah' },
@@ -181,6 +180,13 @@
       }
     }
 
+    // autoplay backsound (aktif setelah interaksi user)
+    document.body.addEventListener('click', () => {
+      const bgm = document.getElementById('bgm');
+      if (bgm.paused) bgm.play();
+    }, { once: true });
+
+    
     loadLevel();
   </script>
 </body>
