@@ -56,15 +56,37 @@
     }
     button:hover { background: #43a047; }
     .message { margin-top: 10px; min-height: 24px; }
+
+footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+footer a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+
+    
   </style>
 </head>
 <body>
   <div class="game">
-    <h1>🎯 Tebak-Tebakan Seru</h1>
+    <h1>Game Tebak-Tebakan Seru</h1>
     <div class="info">
       <div id="level"></div>
       <div id="score">Score: 0</div>
-      <div id="lives">❤️ 3</div>
+      <div id="lives">❤️ 4</div>
     </div>
     <div id="question"></div>
     <div class="timer" id="timer"></div>
@@ -165,7 +187,7 @@
       if (userAnswer === levels[currentLevel].a) {
         clearInterval(timerInterval);
         score += 10 + timeLeft; // bonus waktu
-        timeLeft = Math.min(timeLeft + 5, 60); // tambah waktu, maksimal 60 detik
+        timeLeft = Math.min(timeLeft + 2, 60); // tambah waktu, maksimal 60 detik
         document.getElementById('message').innerText = '✅ Benar! +5 detik bonus waktu';
         currentLevel++;
         updateInfo();
@@ -189,5 +211,15 @@
     
     loadLevel();
   </script>
+
+
+<footer>
+  © 2026 • Dibuat oleh Bang RADEN
+  <a href="https://wa.me/6289876543210?text=Halo%20saya%20mau%20tanya%20tentang%20game%20tebak-tebakan" target="_blank">
+    📞WhatsApp 
+  </a>
+</footer>
+  
+  
 </body>
 </html>
